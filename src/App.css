@@ -802,6 +802,43 @@
   color: var(--text-muted);
 }
 
+/* Home screen hint (bottom of lock screen) */
+.home-hint {
+  position: absolute;
+  bottom: 24px;
+  left: 16px;
+  right: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 40px 14px 16px;
+  text-align: center;
+  animation: fade-in 0.8s ease 1.5s both;
+}
+.home-hint-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.home-hint-step {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+.home-hint-dismiss {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  opacity: 0.6;
+}
+.home-hint-dismiss:hover { opacity: 1; }
+
 /* ===== Install prompt (dark glass) ===== */
 .install-prompt {
   position: fixed;

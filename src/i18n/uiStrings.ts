@@ -43,4 +43,16 @@ export const ui: Record<string, BiText> = {
   minutes: { en: 'min', ru: 'мин' },
   seconds: { en: 'sec', ru: 'сек' },
   tapHeart: { en: 'Tap the heart 💜', ru: 'Нажми на сердце 💜' },
+  addHomeIos: {
+    en: 'Tap {icon} then "Add to Home Screen"',
+    ru: 'Нажми {icon} и «На экран Домой»',
+  },
+  addHomeAndroid: {
+    en: 'Tap ⋮ then "Add to Home screen"',
+    ru: 'Нажми ⋮ → «Добавить на гл. экран»',
+  },
+  addHomeHint: {
+    en: 'Add to Home Screen for the best experience',
+    ru: 'Добавь на главный экран',
+  },
 };
