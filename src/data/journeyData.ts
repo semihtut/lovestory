@@ -220,32 +220,4 @@ export const journeySteps: JourneyStep[] = [
     },
     photos: ['amsterdam_1.jpg', 'amsterdam_2.jpg', 'amsterdam_3.jpg', 'amsterdam_4.jpg'],
   },
-  {
-    id: 'eindhoven',
-    order: 8,
-    city: { en: 'Eindhoven', ru: 'Эйндховен' },
-    country: { en: 'Netherlands', ru: 'Нидерланды' },
-    lat: 51.4416,
-    lng: 5.4697,
-    cardText: {
-      en: 'The glow of a thousand lights — just like the spark between us that never dims.',
-      ru: 'Сияние тысячи огней — как искра между нами, которая никогда не гаснет.',
-    },
-    loveLetter: {
-      en: 'My love, Eindhoven is the city of light, but no light in this world shines brighter than the spark I feel every time you look at me. A thousand lights surround us, yet all I see is you — my home, my warmth, my everything.',
-      ru: 'Любовь моя, Эйндховен — город света, но ни один свет на этой земле не сияет ярче той искры, которую я чувствую каждый раз, когда ты смотришь на меня. Тысяча огней вокруг нас, но я вижу только тебя — мой дом, моё тепло, моё всё.',
-    },
-    quiz: {
-      question: {
-        en: 'What major technology company was founded in Eindhoven?',
-        ru: 'Какая крупная технологическая компания была основана в Эйндховене?',
-      },
-      options: [
-        { text: { en: 'Siemens', ru: 'Сименс' }, isCorrect: false },
-        { text: { en: 'Samsung', ru: 'Самсунг' }, isCorrect: false },
-        { text: { en: 'Philips', ru: 'Филипс' }, isCorrect: true },
-      ],
-    },
-    photos: ['eindhoven_1.svg', 'eindhoven_2.svg', 'eindhoven_3.svg', 'eindhoven_4.svg'],
-  },
 ];

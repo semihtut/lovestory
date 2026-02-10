@@ -27,8 +27,8 @@ export const ui: Record<string, BiText> = {
   welcomeStart: { en: 'Begin our journey', ru: 'Начать путешествие' },
   completeTitle: { en: 'Every city, every moment — ours.', ru: 'Каждый город, каждый миг — наш.' },
   completeMessage: {
-    en: 'From Sarajevo to Eindhoven, every step brought us closer. This is only the beginning of our story.',
-    ru: 'От Сараево до Эйндховена — каждый шаг сблизил нас. Это только начало нашей истории.',
+    en: 'From Sarajevo to Amsterdam, every step brought us closer. This is only the beginning of our story.',
+    ru: 'От Сараево до Амстердама — каждый шаг сблизил нас. Это только начало нашей истории.',
   },
   close: { en: 'Close', ru: 'Закрыть' },
   back: { en: 'Back', ru: 'Назад' },
