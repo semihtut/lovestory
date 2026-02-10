@@ -25,6 +25,5 @@ export function getTimeRemaining(now: number = Date.now()): TimeRemaining {
 }
 
 export function isUnlocked(): boolean {
-  if (import.meta.env.VITE_UNLOCK_OVERRIDE === 'true') return true;
   return Date.now() >= UNLOCK_UTC_MS;
 }
