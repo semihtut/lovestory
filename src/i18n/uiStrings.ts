@@ -1,0 +1,46 @@
+export type Lang = 'en' | 'ru';
+
+type BiText = Record<Lang, string>;
+
+export const ui: Record<string, BiText> = {
+  appTitle: { en: 'Our Love Story', ru: 'Наша История Любви' },
+  nextStep: { en: 'Continue journey', ru: 'Продолжить путешествие' },
+  backToMap: { en: 'Back to map', ru: 'Назад к карте' },
+  continue: { en: 'Continue', ru: 'Продолжить' },
+  tryAgain: { en: 'Not quite — try again 💜', ru: 'Не совсем — попробуй ещё 💜' },
+  stamped: { en: 'Stamped ✅', ru: 'Штамп ✅' },
+  correct: { en: 'You remembered!', ru: 'Ты помнишь!' },
+  locked: { en: 'Locked', ru: 'Закрыто' },
+  completed: { en: 'Completed', ru: 'Пройдено' },
+  installHint: { en: 'Install this app on your phone', ru: 'Установи приложение на телефон' },
+  install: { en: 'Install', ru: 'Установить' },
+  resetProgress: { en: 'Reset progress', ru: 'Сбросить прогресс' },
+  resetConfirm: { en: 'Reset all progress?', ru: 'Сбросить весь прогресс?' },
+  journeyComplete: { en: 'Our journey is complete!', ru: 'Наше путешествие завершено!' },
+  quiz: { en: 'A question for you', ru: 'Вопрос для тебя' },
+  stepOf: { en: 'Step {n} of {total}', ru: 'Шаг {n} из {total}' },
+  welcomeTitle: { en: 'I made this for you', ru: 'Я сделал это для тебя' },
+  welcomeMessage: {
+    en: 'Follow our journey together through the cities where we fell in love.',
+    ru: 'Пройди наше путешествие по городам, где мы влюбились.',
+  },
+  welcomeStart: { en: 'Begin our journey', ru: 'Начать путешествие' },
+  completeTitle: { en: 'Every city, every moment — ours.', ru: 'Каждый город, каждый миг — наш.' },
+  completeMessage: {
+    en: 'From Sarajevo to Eindhoven, every step brought us closer. This is only the beginning of our story.',
+    ru: 'От Сараево до Эйндховена — каждый шаг сблизил нас. Это только начало нашей истории.',
+  },
+  close: { en: 'Close', ru: 'Закрыть' },
+  back: { en: 'Back', ru: 'Назад' },
+  switchLang: { en: 'Switch to Russian', ru: 'Переключить на английский' },
+  resetLabel: { en: 'Reset', ru: 'Сброс' },
+  dismissInstall: { en: 'Dismiss', ru: 'Закрыть' },
+  lockTitle: { en: 'A gift for you 💜', ru: 'Подарок для тебя 💜' },
+  lockSubtitle: { en: 'Something special is waiting...', ru: 'Тебя ждёт что-то особенное...' },
+  lockNote: { en: 'Unlocks on Feb 14 (Moscow time)', ru: 'Откроется 14 февраля (по Москве)' },
+  days: { en: 'days', ru: 'дней' },
+  hours: { en: 'hours', ru: 'часов' },
+  minutes: { en: 'min', ru: 'мин' },
+  seconds: { en: 'sec', ru: 'сек' },
+  tapHeart: { en: 'Tap the heart 💜', ru: 'Нажми на сердце 💜' },
+};

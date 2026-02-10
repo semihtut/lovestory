@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7b6d8d"/>
+      <stop offset="100%" stop-color="#b8a9c9"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#bg)"/>
+  <text x="200" y="130" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="28" font-weight="700" fill="white" opacity="0.9">Eindhoven</text>
+  <text x="200" y="175" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="50" fill="white" opacity="0.3">♥</text>
+  <text x="200" y="240" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="16" fill="white" opacity="0.6">Photo 1</text>
+</svg>
