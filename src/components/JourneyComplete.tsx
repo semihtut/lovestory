@@ -67,6 +67,14 @@ export default function JourneyComplete({ onClose }: Props) {
         </div>
         <h1 className="complete-title">{t('completeTitle')}</h1>
         <p className="complete-message">{t('completeMessage')}</p>
+        <h3 className="reasons-title">{t('reasonsTitle')}</h3>
+        <ul className="reasons-list">
+          {[1,2,3,4,5,6,7,8].map(n => (
+            <li key={n} className="reason-item" style={{ animationDelay: `${0.3 + n * 0.15}s` }}>
+              {t(`reason${n}`)}
+            </li>
+          ))}
+        </ul>
         <button className="complete-btn" onClick={onClose}>
           {t('close')}
         </button>

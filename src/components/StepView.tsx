@@ -1,6 +1,8 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import HeartAnimation from './HeartAnimation';
+import ScratchCard from './ScratchCard';
+import PhotoPuzzle from './PhotoPuzzle';
 import type { JourneyStep } from '../data/journeyData';
 import { journeySteps } from '../data/journeyData';
 
@@ -21,6 +23,13 @@ export default function StepView({ step, isCompleted, onComplete, onBack }: Step
   const [phase, setPhase] = useState<QuizPhase>('answering');
   const [failedImages, setFailedImages] = useState<Set<string>>(new Set());
   const touchRef = useRef<{ x: number; y: number } | null>(null);
+  const [showPuzzle, setShowPuzzle] = useState(false);
+
+  // Scratch card state: check localStorage for whether already scratched
+  const scratchKey = `lovestory-scratched-${step.id}`;
+  const [scratched, setScratched] = useState(() => {
+    return localStorage.getItem(scratchKey) === 'true';
+  });
 
   // Reset state when step changes
   useEffect(() => {
@@ -28,7 +37,14 @@ export default function StepView({ step, isCompleted, onComplete, onBack }: Step
     setSelected(null);
     setAnswered(false);
     setPhase('answering');
+    setShowPuzzle(false);
+    setScratched(localStorage.getItem(`lovestory-scratched-${step.id}`) === 'true');
   }, [step.id]);
+
+  const handleScratchReveal = useCallback(() => {
+    localStorage.setItem(scratchKey, 'true');
+    setScratched(true);
+  }, [scratchKey]);
 
   const handleAnswer = useCallback(
     (index: number) => {
@@ -74,6 +90,20 @@ export default function StepView({ step, isCompleted, onComplete, onBack }: Step
   const heroFailed = failedImages.has(heroPhoto);
   const isCorrectAnswer = answered && selected !== null && step.quiz.options[selected].isCorrect;
 
+  // Determine if scratch card should be shown: first photo, not completed, not yet scratched
+  const showScratchCard = heroIdx === 0 && !isCompleted && !scratched;
+
+  const heroImgElement = !heroFailed ? (
+    <img
+      key={heroPhoto}
+      src={`${base}photos/${heroPhoto}`}
+      alt={step.city[lang]}
+      width={400}
+      height={300}
+      onError={() => handleImgError(heroPhoto)}
+    />
+  ) : null;
+
   return (
     <div className="step-view">
       {phase === 'success' && <HeartAnimation />}
@@ -87,15 +117,12 @@ export default function StepView({ step, isCompleted, onComplete, onBack }: Step
           onTouchStart={onTouchStart}
           onTouchEnd={onTouchEnd}
         >
-          {!heroFailed && (
-            <img
-              key={heroPhoto}
-              src={`${base}photos/${heroPhoto}`}
-              alt={step.city[lang]}
-              width={400}
-              height={300}
-              onError={() => handleImgError(heroPhoto)}
-            />
+          {showScratchCard ? (
+            <ScratchCard onRevealed={handleScratchReveal}>
+              {heroImgElement}
+            </ScratchCard>
+          ) : (
+            heroImgElement
           )}
           {/* Dot indicators */}
           {step.photos.length > 1 && (
@@ -143,11 +170,21 @@ export default function StepView({ step, isCompleted, onComplete, onBack }: Step
         {isCompleted ? (
           <div className="stamped-section">
             <div className="stamped-badge">{t('stamped')}</div>
+            <button className="puzzle-btn" onClick={() => setShowPuzzle(true)}>
+              🧩 {t('puzzleBtn')}
+            </button>
+            {showPuzzle && (
+              <PhotoPuzzle photoSrc={`${base}photos/${step.photos[0]}`} onClose={() => setShowPuzzle(false)} />
+            )}
           </div>
         ) : phase === 'success' ? (
           <div className="success-section">
             <div className="stamped-badge stamp-animate">{t('stamped')}</div>
             <p className="correct-msg">{t('correct')}</p>
+            <div className="love-letter">
+              <div className="love-letter-label">{t('loveLetter')}</div>
+              <p className="love-letter-text">{step.loveLetter[lang]}</p>
+            </div>
             <button className="continue-btn" onClick={() => onComplete(step.id)}>
               {t('continue')}
             </button>

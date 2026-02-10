@@ -8,7 +8,10 @@ import JourneyComplete from './components/JourneyComplete';
 import LockScreen from './components/LockScreen';
 import IntroAnimation from './components/IntroAnimation';
 import InstallPrompt from './components/InstallPrompt';
+import Fireflies from './components/Fireflies';
+import SecretMessage from './components/SecretMessage';
 import { useProgress } from './hooks/useProgress';
+import { useShake } from './hooks/useShake';
 import { journeySteps } from './data/journeyData';
 import { isUnlocked } from './utils/unlock';
 import './App.css';
@@ -23,7 +26,10 @@ function AppContent() {
   const [transitioning, setTransitioning] = useState(false);
   const [showWelcome, setShowWelcome] = useState(() => !localStorage.getItem(WELCOMED_KEY));
   const [showComplete, setShowComplete] = useState(false);
+  const [showSecret, setShowSecret] = useState(false);
   const { completedSteps, completeStep, resetProgress } = useProgress();
+
+  useShake(useCallback(() => setShowSecret(true), []));
 
   const unlockedSteps = useMemo(() => {
     const set = new Set<string>();
@@ -96,6 +102,7 @@ function AppContent() {
   if (locked) {
     return (
       <div className="app">
+        <Fireflies />
         <Header locked onReset={() => {}} />
         <LockScreen onUnlocked={() => setLocked(false)} />
       </div>
@@ -104,6 +111,7 @@ function AppContent() {
 
   return (
     <div className="app">
+      <Fireflies />
       {showWelcome && <WelcomeScreen onStart={handleWelcomeStart} />}
       {showComplete && <JourneyComplete onClose={() => setShowComplete(false)} />}
 
@@ -129,6 +137,7 @@ function AppContent() {
       </div>
 
       <InstallPrompt />
+      {showSecret && <SecretMessage onClose={() => setShowSecret(false)} />}
     </div>
   );
 }
