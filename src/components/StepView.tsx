@@ -3,6 +3,10 @@ import { useLanguage } from '../context/LanguageContext';
 import HeartAnimation from './HeartAnimation';
 import ScratchCard from './ScratchCard';
 import PhotoPuzzle from './PhotoPuzzle';
+import HiddenHeart from './HiddenHeart';
+import HeartToast from './HeartToast';
+import TicketStubCard from './TicketStubCard';
+import PostcardModal from './PostcardModal';
 import type { JourneyStep } from '../data/journeyData';
 import { journeySteps } from '../data/journeyData';
 
@@ -11,11 +15,13 @@ interface StepViewProps {
   isCompleted: boolean;
   onComplete: (stepId: string) => void;
   onBack: () => void;
+  collectedHearts: Set<string>;
+  onCollectHeart: (stepId: string) => void;
 }
 
 type QuizPhase = 'answering' | 'correct-delay' | 'success';
 
-export default function StepView({ step, isCompleted, onComplete, onBack }: StepViewProps) {
+export default function StepView({ step, isCompleted, onComplete, onBack, collectedHearts, onCollectHeart }: StepViewProps) {
   const { lang, t } = useLanguage();
   const [heroIdx, setHeroIdx] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
@@ -24,6 +30,8 @@ export default function StepView({ step, isCompleted, onComplete, onBack }: Step
   const [failedImages, setFailedImages] = useState<Set<string>>(new Set());
   const touchRef = useRef<{ x: number; y: number } | null>(null);
   const [showPuzzle, setShowPuzzle] = useState(false);
+  const [showHeartToast, setShowHeartToast] = useState(false);
+  const [showPostcard, setShowPostcard] = useState(false);
 
   // Scratch card state: check localStorage for whether already scratched
   const scratchKey = `lovestory-scratched-${step.id}`;
@@ -124,6 +132,18 @@ export default function StepView({ step, isCompleted, onComplete, onBack }: Step
           ) : (
             heroImgElement
           )}
+          {!showScratchCard && heroIdx === 0 && (
+            <HiddenHeart
+              stepId={step.id}
+              xPercent={step.hiddenHeart.xPercent}
+              yPercent={step.hiddenHeart.yPercent}
+              alreadyCollected={collectedHearts.has(step.id)}
+              onCollect={(id) => {
+                onCollectHeart(id);
+                setShowHeartToast(true);
+              }}
+            />
+          )}
           {/* Dot indicators */}
           {step.photos.length > 1 && (
             <div className="hero-dots">
@@ -166,15 +186,26 @@ export default function StepView({ step, isCompleted, onComplete, onBack }: Step
           <p>{step.cardText[lang]}</p>
         </div>
 
+        {/* Ticket stub */}
+        <TicketStubCard ticket={step.ticket} stepOrder={step.order} compact />
+
         {/* Quiz / states */}
         {isCompleted ? (
           <div className="stamped-section">
             <div className="stamped-badge">{t('stamped')}</div>
-            <button className="puzzle-btn" onClick={() => setShowPuzzle(true)}>
-              🧩 {t('puzzleBtn')}
-            </button>
+            <div className="stamped-actions">
+              <button className="puzzle-btn" onClick={() => setShowPuzzle(true)}>
+                🧩 {t('puzzleBtn')}
+              </button>
+              <button className="postcard-btn" onClick={() => setShowPostcard(true)}>
+                ✉️ {t('postcardBtn')}
+              </button>
+            </div>
             {showPuzzle && (
               <PhotoPuzzle photoSrc={`${base}photos/${step.photos[0]}`} onClose={() => setShowPuzzle(false)} />
+            )}
+            {showPostcard && (
+              <PostcardModal step={step} onClose={() => setShowPostcard(false)} />
             )}
           </div>
         ) : phase === 'success' ? (
@@ -185,9 +216,15 @@ export default function StepView({ step, isCompleted, onComplete, onBack }: Step
               <div className="love-letter-label">{t('loveLetter')}</div>
               <p className="love-letter-text">{step.loveLetter[lang]}</p>
             </div>
+            <button className="postcard-btn" onClick={() => setShowPostcard(true)}>
+              ✉️ {t('postcardBtn')}
+            </button>
             <button className="continue-btn" onClick={() => onComplete(step.id)}>
               {t('continue')}
             </button>
+            {showPostcard && (
+              <PostcardModal step={step} onClose={() => setShowPostcard(false)} />
+            )}
           </div>
         ) : (
           <div className="quiz-card">
@@ -226,6 +263,9 @@ export default function StepView({ step, isCompleted, onComplete, onBack }: Step
       </div>
 
       <button className="back-to-map-btn" onClick={onBack}>{t('backToMap')}</button>
+      {showHeartToast && (
+        <HeartToast message={t('heartFound')} onDone={() => setShowHeartToast(false)} />
+      )}
     </div>
   );
 }

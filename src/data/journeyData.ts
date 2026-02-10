@@ -7,6 +7,13 @@ export interface QuizOption {
   isCorrect: boolean;
 }
 
+export interface TicketStub {
+  mode: 'train' | 'flight' | 'meetup';
+  from: BiText;
+  to: BiText;
+  code: string;
+}
+
 export interface JourneyStep {
   id: string;
   order: number;
@@ -21,6 +28,8 @@ export interface JourneyStep {
     options: QuizOption[];
   };
   photos: string[];
+  hiddenHeart: { xPercent: number; yPercent: number };
+  ticket: TicketStub;
 }
 
 export const journeySteps: JourneyStep[] = [
@@ -51,6 +60,13 @@ export const journeySteps: JourneyStep[] = [
       ],
     },
     photos: ['sarajevo_1.jpg', 'sarajevo_2.jpg', 'sarajevo_3.jpg', 'sarajevo_4.jpg', 'sarajevo_5.jpg'],
+    hiddenHeart: { xPercent: 87, yPercent: 12 },
+    ticket: {
+      mode: 'meetup',
+      from: { en: 'Helsinki & Moscow', ru: 'Хельсинки и Москва' },
+      to: { en: 'Sarajevo', ru: 'Сараево' },
+      code: 'LOVE-001',
+    },
   },
   {
     id: 'madrid',
@@ -79,6 +95,13 @@ export const journeySteps: JourneyStep[] = [
       ],
     },
     photos: ['madrid_1.jpg', 'madrid_2.jpg', 'madrid_3.jpg', 'madrid_4.jpg'],
+    hiddenHeart: { xPercent: 8, yPercent: 78 },
+    ticket: {
+      mode: 'flight',
+      from: { en: 'Sarajevo', ru: 'Сараево' },
+      to: { en: 'Madrid', ru: 'Мадрид' },
+      code: 'IB-2431',
+    },
   },
   {
     id: 'barcelona',
@@ -107,6 +130,13 @@ export const journeySteps: JourneyStep[] = [
       ],
     },
     photos: ['barcelona_1.jpg', 'barcelona_2.jpg', 'barcelona_3.jpg', 'barcelona_4.jpg'],
+    hiddenHeart: { xPercent: 92, yPercent: 65 },
+    ticket: {
+      mode: 'train',
+      from: { en: 'Madrid', ru: 'Мадрид' },
+      to: { en: 'Barcelona', ru: 'Барселона' },
+      code: 'AVE-6120',
+    },
   },
   {
     id: 'valencia',
@@ -135,6 +165,13 @@ export const journeySteps: JourneyStep[] = [
       ],
     },
     photos: ['valencia_1.jpg', 'valencia_2.jpg', 'valencia_3.jpg', 'valencia_4.jpg'],
+    hiddenHeart: { xPercent: 15, yPercent: 22 },
+    ticket: {
+      mode: 'train',
+      from: { en: 'Barcelona', ru: 'Барселона' },
+      to: { en: 'Valencia', ru: 'Валенсия' },
+      code: 'EUR-3301',
+    },
   },
   {
     id: 'bosnia',
@@ -163,6 +200,13 @@ export const journeySteps: JourneyStep[] = [
       ],
     },
     photos: ['bosnia_1.jpg', 'bosnia_2.jpg', 'bosnia_3.jpg', 'bosnia_4.jpg'],
+    hiddenHeart: { xPercent: 50, yPercent: 90 },
+    ticket: {
+      mode: 'flight',
+      from: { en: 'Valencia', ru: 'Валенсия' },
+      to: { en: 'Bosnia', ru: 'Босния' },
+      code: 'LH-1899',
+    },
   },
   {
     id: 'rotterdam',
@@ -191,6 +235,13 @@ export const journeySteps: JourneyStep[] = [
       ],
     },
     photos: ['rotterdam_1.jpg', 'rotterdam_2.jpg', 'rotterdam_3.jpg', 'rotterdam_4.jpg'],
+    hiddenHeart: { xPercent: 75, yPercent: 8 },
+    ticket: {
+      mode: 'flight',
+      from: { en: 'Bosnia', ru: 'Босния' },
+      to: { en: 'Rotterdam', ru: 'Роттердам' },
+      code: 'KL-1023',
+    },
   },
   {
     id: 'amsterdam',
@@ -219,5 +270,12 @@ export const journeySteps: JourneyStep[] = [
       ],
     },
     photos: ['amsterdam_1.jpg', 'amsterdam_2.jpg', 'amsterdam_3.jpg', 'amsterdam_4.jpg'],
+    hiddenHeart: { xPercent: 5, yPercent: 45 },
+    ticket: {
+      mode: 'train',
+      from: { en: 'Rotterdam', ru: 'Роттердам' },
+      to: { en: 'Amsterdam', ru: 'Амстердам' },
+      code: 'NS-9240',
+    },
   },
 ];

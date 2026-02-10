@@ -11,11 +11,13 @@ interface MapViewProps {
   unlockedSteps: Set<string>;
   currentStep: JourneyStep | undefined;
   onOpenStep: (stepId: string) => void;
+  collectedHearts: Set<string>;
+  onOpenTickets: () => void;
 }
 
 const ACCENT = '#a855f7';
 
-function createPinIcon(type: 'completed' | 'current' | 'locked', order: number): L.DivIcon {
+function createPinIcon(type: 'completed' | 'current' | 'locked', order: number, hasHeart: boolean = false): L.DivIcon {
   if (type === 'locked') {
     return L.divIcon({
       className: '',
@@ -26,6 +28,7 @@ function createPinIcon(type: 'completed' | 'current' | 'locked', order: number):
   }
   const label = type === 'completed' ? '&#10003;' : order;
   const pulse = type === 'current' ? '<div class="pin-pulse"></div>' : '';
+  const heartBadge = hasHeart ? '<span class="pin-heart-badge">💜</span>' : '';
   return L.divIcon({
     className: '',
     html: `
@@ -38,6 +41,7 @@ function createPinIcon(type: 'completed' | 'current' | 'locked', order: number):
             <circle cx="15" cy="14" r="7.5" fill="white" opacity="0.92"/>
           </svg>
           <span class="pin-label">${label}</span>
+          ${heartBadge}
         </div>
       </div>`,
     iconSize: [30, 40],
@@ -73,6 +77,8 @@ export default function MapView({
   unlockedSteps,
   currentStep,
   onOpenStep,
+  collectedHearts,
+  onOpenTickets,
 }: MapViewProps) {
   const { lang, t } = useLanguage();
 
@@ -126,11 +132,12 @@ export default function MapView({
           const done = completedSteps.has(step.id);
           const open = unlockedSteps.has(step.id);
           const type = done ? 'completed' : open ? 'current' : 'locked';
+          const hasHeart = collectedHearts.has(step.id);
           return (
             <Marker
               key={step.id}
               position={[step.lat, step.lng]}
-              icon={createPinIcon(type, step.order)}
+              icon={createPinIcon(type, step.order, hasHeart)}
               eventHandlers={open ? { click: () => onOpenStep(step.id) } : {}}
             >
               <Tooltip direction="top" offset={[0, -42]}>
@@ -150,6 +157,16 @@ export default function MapView({
               className={`dot${completedSteps.has(s.id) ? ' dot-done' : s.id === currentStep?.id ? ' dot-current' : ''}`}
             />
           ))}
+        </div>
+
+        <div className="sheet-actions-row">
+          <div className="hearts-counter">
+            <span className="hearts-counter-icon">💜</span>
+            <span>{collectedHearts.size} / {steps.length}</span>
+          </div>
+          <button className="tickets-btn" onClick={onOpenTickets}>
+            🎫 {t('tickets')}
+          </button>
         </div>
 
         {allComplete ? (

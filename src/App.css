@@ -1211,3 +1211,454 @@
   pointer-events: none;
   animation: fade-in 1s ease 3s both;
 }
+
+/* ===== Hidden Hearts (Easter Eggs) ===== */
+.hidden-heart {
+  position: absolute;
+  z-index: 3;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  opacity: 0.2;
+  filter: drop-shadow(0 0 4px rgba(168, 85, 247, 0.4));
+  animation: hidden-heart-pulse 3s ease-in-out infinite;
+  transform: translate(-50%, -50%);
+  -webkit-tap-highlight-color: transparent;
+}
+@keyframes hidden-heart-pulse {
+  0%, 100% { opacity: 0.15; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 0.3; transform: translate(-50%, -50%) scale(1.1); }
+}
+.hidden-heart-found {
+  animation: heart-collect 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
+}
+@keyframes heart-collect {
+  0% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
+  50% { transform: translate(-50%, -50%) scale(2.5); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+}
+
+/* Heart toast */
+.heart-toast {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2000;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.15);
+  animation: toast-in 0.3s ease, toast-out 0.3s ease 1.7s forwards;
+  white-space: nowrap;
+}
+@keyframes toast-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+@keyframes toast-out {
+  from { opacity: 1; transform: translateX(-50%) translateY(0); }
+  to { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+}
+
+/* Pin heart badge */
+.pin-heart-badge {
+  position: absolute;
+  top: -2px;
+  right: -6px;
+  font-size: 10px;
+  line-height: 1;
+  filter: drop-shadow(0 0 4px rgba(168, 85, 247, 0.6));
+  pointer-events: none;
+  animation: pin-badge-sparkle 2s ease-in-out infinite;
+}
+@keyframes pin-badge-sparkle {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+/* Hearts counter in bottom sheet */
+.hearts-counter {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.hearts-counter-icon {
+  font-size: 14px;
+}
+
+/* Sheet actions row */
+.sheet-actions-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+/* ===== Ticket Stub Card ===== */
+.ticket-stub {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px 14px 20px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+.ticket-stub::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  background: repeating-radial-gradient(
+    circle at 0 0,
+    transparent 0,
+    transparent 4px,
+    var(--surface) 4px,
+    var(--surface) 8px
+  );
+  background-size: 8px 16px;
+  background-position: -4px 0;
+  border-right: 1px dashed var(--border);
+}
+.ticket-stub-compact {
+  padding: 10px 14px 10px 18px;
+  margin-bottom: 16px;
+}
+.ticket-mode-icon {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  color: var(--accent);
+  filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.3));
+}
+.ticket-mode-icon svg {
+  width: 100%;
+  height: 100%;
+}
+.ticket-route {
+  flex: 1;
+  min-width: 0;
+}
+.ticket-from-to {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 2px;
+  flex-wrap: wrap;
+}
+.ticket-arrow {
+  color: var(--accent);
+  font-size: 12px;
+}
+.ticket-code {
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+}
+.ticket-order {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--accent);
+  opacity: 0.4;
+  flex-shrink: 0;
+}
+
+/* Stamped section actions row */
+.stamped-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ===== Tickets Screen ===== */
+.tickets-view {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.tickets-scroll {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding: 20px 16px 32px;
+}
+.tickets-title {
+  font-family: var(--font-heading);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text);
+  text-align: center;
+  margin-bottom: 24px;
+}
+.tickets-list {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.tickets-list::before {
+  content: '';
+  position: absolute;
+  left: 10px;
+  top: 20px;
+  bottom: 20px;
+  width: 2px;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--accent) 0,
+    var(--accent) 4px,
+    transparent 4px,
+    transparent 10px
+  );
+  opacity: 0.2;
+}
+.ticket-item {
+  position: relative;
+}
+.ticket-locked .ticket-stub {
+  filter: blur(3px);
+  opacity: 0.35;
+  pointer-events: none;
+}
+.ticket-lock-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: var(--text-muted);
+  z-index: 2;
+}
+.ticket-heart-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 12px;
+  z-index: 2;
+  filter: drop-shadow(0 0 4px rgba(168, 85, 247, 0.5));
+}
+
+/* Tickets button in bottom sheet */
+.tickets-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 14px;
+  border-radius: 16px;
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px solid var(--border);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  transition: background 0.2s, color 0.2s;
+}
+.tickets-btn:active {
+  background: rgba(168, 85, 247, 0.2);
+  color: var(--accent);
+}
+
+/* ===== Postcard Modal ===== */
+.postcard-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2500;
+  background: var(--bg);
+  overflow: hidden;
+  animation: fade-in 0.4s ease;
+}
+.postcard-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.postcard-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(7, 4, 13, 0.88) 0%,
+    rgba(7, 4, 13, 0.5) 35%,
+    rgba(7, 4, 13, 0.15) 60%,
+    transparent 80%
+  );
+}
+.postcard-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px;
+  padding-bottom: max(24px, env(safe-area-inset-bottom));
+}
+.postcard-city {
+  font-family: var(--font-heading);
+  font-size: 36px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.1;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+  margin-bottom: 4px;
+}
+.postcard-country {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 16px;
+}
+.postcard-text {
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.7;
+  max-width: 320px;
+}
+.postcard-stamp {
+  position: absolute;
+  bottom: 140px;
+  right: 24px;
+  transform: rotate(-12deg);
+  border: 2px solid var(--accent);
+  border-radius: 4px;
+  padding: 8px 14px;
+  text-align: center;
+  background: rgba(7, 4, 13, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+.postcard-stamp-city {
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+.postcard-stamp-date {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+.postcard-close {
+  position: absolute;
+  top: max(16px, env(safe-area-inset-top));
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(7, 4, 13, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.8);
+  z-index: 10;
+}
+.postcard-hint {
+  text-align: center;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 20px;
+  animation: fade-in 0.5s ease 1.5s both, toast-out 0.5s ease 4.5s forwards;
+}
+.postcard-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  background: rgba(168, 85, 247, 0.1);
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  transition: background 0.2s;
+}
+.postcard-btn:active {
+  background: rgba(168, 85, 247, 0.2);
+}
+
+/* ===== Lock Screen Enhancements ===== */
+.lock-teaser {
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-style: italic;
+  color: var(--text-secondary);
+  text-align: center;
+  margin: 16px 0 8px;
+  opacity: 0;
+  animation: lock-teaser-in 1s ease 0.5s forwards;
+  line-height: 1.5;
+}
+@keyframes lock-teaser-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 0.8; transform: translateY(0); }
+}
+
+/* Preview strip — abstract step dots */
+.lock-preview-strip {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0 16px;
+}
+.lock-preview-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border);
+  opacity: 0.4;
+  transition: all 0.3s ease;
+}
+.lock-preview-dot.lock-preview-active {
+  background: var(--accent);
+  opacity: 1;
+  box-shadow: 0 0 8px rgba(168, 85, 247, 0.5), 0 0 16px rgba(168, 85, 247, 0.2);
+  animation: preview-pulse 2s ease-in-out infinite;
+}
+@keyframes preview-pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 8px rgba(168, 85, 247, 0.5); }
+  50% { transform: scale(1.3); box-shadow: 0 0 14px rgba(168, 85, 247, 0.7), 0 0 24px rgba(168, 85, 247, 0.3); }
+}
+
+/* Save the date button */
+.save-date-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 24px;
+  border-radius: var(--radius-sm);
+  background: rgba(168, 85, 247, 0.12);
+  border: 1px solid var(--border);
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 12px;
+  transition: background 0.2s;
+}
+.save-date-btn:active {
+  background: rgba(168, 85, 247, 0.25);
+}

@@ -1,24 +1,76 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { getTimeRemaining, type TimeRemaining } from '../utils/unlock';
+import { teaserMessages } from '../i18n/uiStrings';
+import { journeySteps } from '../data/journeyData';
 
 interface LockScreenProps {
   onUnlocked: () => void;
 }
+
+const TEASER_KEY = 'lovestory-teaser-idx';
+const STEP_COUNT = journeySteps.length;
 
 function isStandalone() {
   return window.matchMedia('(display-mode: standalone)').matches
     || ('standalone' in navigator && (navigator as unknown as { standalone: boolean }).standalone);
 }
 
+/** Pick a teaser index based on days left + cycling via localStorage */
+function pickTeaserIndex(daysLeft: number): number {
+  const total = teaserMessages.length;
+  // Combine days-based offset with a stored cycling index
+  const stored = parseInt(localStorage.getItem(TEASER_KEY) || '0', 10);
+  const next = (stored + 1) % total;
+  localStorage.setItem(TEASER_KEY, String(next));
+  // Mix in daysLeft so messages feel contextual closer to Feb 14
+  return (next + daysLeft) % total;
+}
+
+/** Generate an .ics file and trigger download */
+function downloadICS(lang: 'en' | 'ru') {
+  const title = lang === 'ru'
+    ? 'Наша история откроется 💜'
+    : 'Our Love Story unlocks 💜';
+  const ics = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//LoveStory//EN',
+    'BEGIN:VEVENT',
+    'DTSTART;TZID=Europe/Moscow:20260214T000000',
+    'DTEND;TZID=Europe/Moscow:20260214T235900',
+    `SUMMARY:${title}`,
+    'END:VEVENT',
+    'END:VCALENDAR',
+  ].join('\r\n');
+
+  const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'love-story.ics';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
 export default function LockScreen({ onUnlocked }: LockScreenProps) {
-  const { t } = useLanguage();
+  const { lang, t } = useLanguage();
   const [time, setTime] = useState<TimeRemaining>(() => getTimeRemaining());
   const [revealed, setRevealed] = useState(false);
   const [homeDismissed, setHomeDismissed] = useState(false);
+  const [showSavedToast, setShowSavedToast] = useState(false);
 
   const isIos = useMemo(() => /iP(hone|ad|od)/.test(navigator.userAgent), []);
   const showHomeHint = !isStandalone() && !homeDismissed;
+
+  // Pick teaser on mount (once per app open)
+  const teaserIdx = useMemo(() => pickTeaserIndex(time.days), []);
+  const teaser = teaserMessages[teaserIdx];
+
+  // Which dot to highlight (cycles through steps based on days left)
+  const highlightedDot = time.days % STEP_COUNT;
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -31,6 +83,12 @@ export default function LockScreen({ onUnlocked }: LockScreenProps) {
     }, 1000);
     return () => clearInterval(id);
   }, [onUnlocked]);
+
+  const handleSaveDate = useCallback(() => {
+    downloadICS(lang);
+    setShowSavedToast(true);
+    setTimeout(() => setShowSavedToast(false), 2000);
+  }, [lang]);
 
   const pad = (n: number) => String(n).padStart(2, '0');
 
@@ -85,7 +143,29 @@ export default function LockScreen({ onUnlocked }: LockScreenProps) {
               </div>
             </div>
 
+            {/* Rotating teaser message */}
+            <p className="lock-teaser">{teaser[lang]}</p>
+
             <p className="lock-note">{t('lockNote')}</p>
+
+            {/* Preview strip — abstract dots for each step */}
+            <div className="lock-preview-strip">
+              {Array.from({ length: STEP_COUNT }, (_, i) => (
+                <span
+                  key={i}
+                  className={`lock-preview-dot${i === highlightedDot ? ' lock-preview-active' : ''}`}
+                />
+              ))}
+            </div>
+
+            {/* Save the date button */}
+            <button className="save-date-btn" onClick={handleSaveDate}>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" style={{ marginRight: 6 }}>
+                <rect x="3" y="4" width="18" height="18" rx="2" />
+                <path d="M16 2v4M8 2v4M3 10h18" />
+              </svg>
+              {t('saveTheDate')}
+            </button>
           </>
         )}
       </div>
@@ -105,6 +185,11 @@ export default function LockScreen({ onUnlocked }: LockScreenProps) {
             </svg>
           </button>
         </div>
+      )}
+
+      {/* Saved toast */}
+      {showSavedToast && (
+        <div className="heart-toast">{t('saved')}</div>
       )}
     </div>
   );

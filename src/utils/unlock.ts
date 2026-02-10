@@ -25,6 +25,5 @@ export function getTimeRemaining(now: number = Date.now()): TimeRemaining {
 }
 
 export function isUnlocked(): boolean {
-  // TODO: Remove before Feb 14 — temporary test bypass
-  return true;
+  return Date.now() >= UNLOCK_UTC_MS;
 }

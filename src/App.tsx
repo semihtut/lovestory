@@ -10,7 +10,9 @@ import IntroAnimation from './components/IntroAnimation';
 import InstallPrompt from './components/InstallPrompt';
 import Fireflies from './components/Fireflies';
 import SecretMessage from './components/SecretMessage';
+import TicketsScreen from './components/TicketsScreen';
 import { useProgress } from './hooks/useProgress';
+import { useHiddenHearts } from './hooks/useHiddenHearts';
 import { useShake } from './hooks/useShake';
 import { journeySteps } from './data/journeyData';
 import { isUnlocked } from './utils/unlock';
@@ -21,13 +23,14 @@ const WELCOMED_KEY = 'lovestory-welcomed';
 function AppContent() {
   const [showIntro, setShowIntro] = useState(true);
   const [locked, setLocked] = useState(() => !isUnlocked());
-  const [view, setView] = useState<'map' | 'step'>('map');
+  const [view, setView] = useState<'map' | 'step' | 'tickets'>('map');
   const [activeStepId, setActiveStepId] = useState<string | null>(null);
   const [transitioning, setTransitioning] = useState(false);
   const [showWelcome, setShowWelcome] = useState(() => !localStorage.getItem(WELCOMED_KEY));
   const [showComplete, setShowComplete] = useState(false);
   const [showSecret, setShowSecret] = useState(false);
   const { completedSteps, completeStep, resetProgress } = useProgress();
+  const { collectedHearts, collectHeart, resetHearts } = useHiddenHearts();
 
   useShake(useCallback(() => setShowSecret(true), []));
 
@@ -49,7 +52,7 @@ function AppContent() {
     [unlockedSteps, completedSteps],
   );
 
-  const switchTo = useCallback((target: 'map' | 'step', stepId?: string) => {
+  const switchTo = useCallback((target: 'map' | 'step' | 'tickets', stepId?: string) => {
     setTransitioning(true);
     setTimeout(() => {
       if (stepId) setActiveStepId(stepId);
@@ -80,9 +83,12 @@ function AppContent() {
 
   const handleReset = () => {
     resetProgress();
+    resetHearts();
     setView('map');
     setActiveStepId(null);
   };
+
+  const openTickets = () => switchTo('tickets');
 
   const handleWelcomeStart = () => {
     setShowWelcome(false);
@@ -115,7 +121,7 @@ function AppContent() {
       {showWelcome && <WelcomeScreen onStart={handleWelcomeStart} />}
       {showComplete && <JourneyComplete onClose={() => setShowComplete(false)} />}
 
-      <Header showBack={view === 'step'} onBack={handleBack} onReset={handleReset} />
+      <Header showBack={view === 'step' || view === 'tickets'} onBack={handleBack} onReset={handleReset} />
 
       <div className={`view-container${transitioning ? ' view-out' : ''}`}>
         {view === 'map' ? (
@@ -125,6 +131,16 @@ function AppContent() {
             unlockedSteps={unlockedSteps}
             currentStep={currentStep}
             onOpenStep={openStep}
+            collectedHearts={collectedHearts}
+            onOpenTickets={openTickets}
+          />
+        ) : view === 'tickets' ? (
+          <TicketsScreen
+            steps={journeySteps}
+            completedSteps={completedSteps}
+            unlockedSteps={unlockedSteps}
+            collectedHearts={collectedHearts}
+            onBack={handleBack}
           />
         ) : activeStep ? (
           <StepView
@@ -132,6 +148,8 @@ function AppContent() {
             isCompleted={completedSteps.has(activeStep.id)}
             onComplete={handleComplete}
             onBack={handleBack}
+            collectedHearts={collectedHearts}
+            onCollectHeart={collectHeart}
           />
         ) : null}
       </div>
