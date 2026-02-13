@@ -5,14 +5,19 @@ interface Props {
   onComplete: () => void;
 }
 
-/* Approximate SVG coordinates (Mercator-ish projection, viewBox 0 0 500 400) */
-const HEL = { x: 213, y: 77 };
-const MOW = { x: 395, y: 148 };
-const SAR = { x: 119, y: 339 };
+/* City label/dot positions (on the heart bumps) */
+const HEL = { x: 125, y: 85 };
+const MOW = { x: 375, y: 85 };
+const SAR = { x: 250, y: 355 };
 
-/* Heart shape: Helsinki path = left half, Moscow path = right half, meeting at Sarajevo (bottom tip) */
-const P1 = `M${HEL.x},${HEL.y} C 60,25 5,200 ${SAR.x},${SAR.y}`;
-const P2 = `M${MOW.x},${MOW.y} C 520,55 350,360 ${SAR.x},${SAR.y}`;
+/*
+ * Heart shape: both paths start from the top-center dip (250,130).
+ * Left half traces through the left bump down to Sarajevo.
+ * Right half traces through the right bump down to Sarajevo.
+ * Together they draw a complete heart outline.
+ */
+const P1 = `M250,130 C 90,45 15,235 ${SAR.x},${SAR.y}`;
+const P2 = `M250,130 C 410,45 485,235 ${SAR.x},${SAR.y}`;
 
 export default function IntroAnimation({ onComplete }: Props) {
   const { lang } = useLanguage();
@@ -34,46 +39,46 @@ export default function IntroAnimation({ onComplete }: Props) {
   return (
     <div className={`intro-screen${fadeOut ? ' intro-fade-out' : ''}`} onClick={finish}>
       <svg viewBox="0 0 500 400" className="intro-svg" aria-hidden="true">
-        {/* Faint dashed route preview */}
+        {/* Faint dashed heart preview */}
         <path d={P1} fill="none" stroke="#a855f7" strokeWidth="1" opacity="0.08" strokeDasharray="4 6" />
         <path d={P2} fill="none" stroke="#ec4899" strokeWidth="1" opacity="0.08" strokeDasharray="4 6" />
 
-        {/* Animated flight paths (draw themselves via SMIL) */}
+        {/* Animated heart halves (draw themselves via SMIL) */}
         <path
-          id="hp" d={P1} fill="none" stroke="#a855f7" strokeWidth="2"
-          strokeLinecap="round" opacity="0.8" pathLength={1}
+          id="hp" d={P1} fill="none" stroke="#a855f7" strokeWidth="2.5"
+          strokeLinecap="round" opacity="0.85" pathLength={1}
           strokeDasharray="1" strokeDashoffset="1" className="intro-path-violet"
         >
           <animate attributeName="stroke-dashoffset" from="1" to="0" dur="2.8s" begin="0.5s" fill="freeze" />
         </path>
         <path
-          id="mp" d={P2} fill="none" stroke="#ec4899" strokeWidth="2"
-          strokeLinecap="round" opacity="0.8" pathLength={1}
+          id="mp" d={P2} fill="none" stroke="#ec4899" strokeWidth="2.5"
+          strokeLinecap="round" opacity="0.85" pathLength={1}
           strokeDasharray="1" strokeDashoffset="1" className="intro-path-pink"
         >
           <animate attributeName="stroke-dashoffset" from="1" to="0" dur="2.8s" begin="0.5s" fill="freeze" />
         </path>
 
-        {/* Plane 1: Helsinki → Sarajevo */}
+        {/* Tracer 1: left half */}
         <g opacity="0">
           <animate attributeName="opacity" from="0" to="1" dur="0.1s" begin="0.5s" fill="freeze" />
           <animate attributeName="opacity" from="1" to="0" dur="0.2s" begin="3.3s" fill="freeze" />
           <animateMotion dur="2.8s" begin="0.5s" fill="freeze" rotate="auto">
             <mpath xlinkHref="#hp" />
           </animateMotion>
-          <circle r="5" fill="#a855f7" opacity="0.2" />
-          <polygon points="5,0 -3,-2.5 -3,2.5" fill="#a855f7" />
+          <circle r="4" fill="#a855f7" opacity="0.3" />
+          <circle r="2" fill="#a855f7" />
         </g>
 
-        {/* Plane 2: Moscow → Sarajevo */}
+        {/* Tracer 2: right half */}
         <g opacity="0">
           <animate attributeName="opacity" from="0" to="1" dur="0.1s" begin="0.5s" fill="freeze" />
           <animate attributeName="opacity" from="1" to="0" dur="0.2s" begin="3.3s" fill="freeze" />
           <animateMotion dur="2.8s" begin="0.5s" fill="freeze" rotate="auto">
             <mpath xlinkHref="#mp" />
           </animateMotion>
-          <circle r="5" fill="#ec4899" opacity="0.2" />
-          <polygon points="5,0 -3,-2.5 -3,2.5" fill="#ec4899" />
+          <circle r="4" fill="#ec4899" opacity="0.3" />
+          <circle r="2" fill="#ec4899" />
         </g>
 
         {/* City dots */}
