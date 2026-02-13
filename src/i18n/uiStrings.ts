@@ -87,6 +87,14 @@ export const ui: Record<string, BiText> = {
   postcardHint: { en: 'Take a screenshot to save 💜', ru: 'Сделай скриншот, чтобы сохранить 💜' },
   saveTheDate: { en: 'Save the date', ru: 'Сохранить дату' },
   saved: { en: 'Saved 💜', ru: 'Сохранено 💜' },
+  hintMessage: { en: 'Remember this moment?', ru: 'Помнишь этот момент?' },
+  hintTryAgain: { en: 'Let me try again', ru: 'Попробую ещё раз' },
+  surpriseCoupon: { en: 'Your Surprise', ru: 'Твой Сюрприз' },
+  couponTitle: { en: 'A Promise From Me', ru: 'Обещание от меня' },
+  couponText: { en: 'One magical dinner date, anywhere you choose. This coupon never expires.', ru: 'Один волшебный ужин в любом месте по твоему выбору. Этот купон бессрочный.' },
+  couponCode: { en: 'LOVE-FOREVER', ru: 'LOVE-FOREVER' },
+  couponValid: { en: 'Valid: Forever', ru: 'Действителен: Вечно' },
+  replayHearts: { en: 'Replay', ru: 'Повторить' },
 };
 
 export const teaserMessages: BiText[] = [
