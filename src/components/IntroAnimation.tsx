@@ -10,8 +10,9 @@ const HEL = { x: 213, y: 77 };
 const MOW = { x: 395, y: 148 };
 const SAR = { x: 119, y: 339 };
 
-const P1 = `M${HEL.x},${HEL.y} C170,155 128,260 ${SAR.x},${SAR.y}`;
-const P2 = `M${MOW.x},${MOW.y} C355,240 208,318 ${SAR.x},${SAR.y}`;
+/* Heart shape: Helsinki path = left half, Moscow path = right half, meeting at Sarajevo (bottom tip) */
+const P1 = `M${HEL.x},${HEL.y} C 60,25 5,200 ${SAR.x},${SAR.y}`;
+const P2 = `M${MOW.x},${MOW.y} C 520,55 350,360 ${SAR.x},${SAR.y}`;
 
 export default function IntroAnimation({ onComplete }: Props) {
   const { lang } = useLanguage();
